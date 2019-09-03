@@ -3,7 +3,18 @@ import os,sys
 from ConfigParser import SafeConfigParser
 import unittest
 import time
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
+
+import dasboard_tests
+
+from login_tests import LoginTests
+from dasboard_tests import DashboardTests
 
 ###  Global content for all project ######
 #path of Chromedriver
@@ -16,47 +27,17 @@ device_ip=config_parser.get('unit_parameters','ip')
 
 ###########################################
 
-class  LoginTests(unittest.TestCase):
-    def setUp(self):
-    # Create a new Chrome session
-       self.driver=webdriver.Chrome(chrome_driver_path)
-       self.driver.implicitly_wait(30)
-       self.driver.maximize_window()
-        ###################################
-       self.admintool_url=str("http://"+device_ip+":9000")
-        # navigate to the application page
-       self.driver.get(self.admintool_url)
-
-    def test_correct_login(self):
-        ## get username field textbox
-        self.username_field=self.driver.find_element_by_id("input-username")
-        self.username_field.clear()
-        ## enter username to field
-        self.admin_user=config_parser.get('username_passwords','general_user_admin')
-        self.username_field.send_keys(self.admin_user)
-
-        ## enter password  text field
-        self.password_field=self.driver.find_element_by_id("input-password")
-        self.password_field.clear()
-
-        ## enter password to field
-        self.password_admin_user=config_parser.get('username_passwords','general_password_admin')
-        self.password_field.send_keys(self.password_admin_user)
-        ### Pres on 'Log in' ###
-        #self.log_in_btn=self.driver.find_element_by_class_name("btn-success btn-full-width")
-        self.log_in_btn=self.driver.find_element_by_xpath("//*[contains(text(),'Log In')]")
-        self.log_in_btn.submit()
-        time.sleep(10)
-    def tearDown(self):
-        # close the browser window
-        self.driver.quit()
-#####################################
 
 
+loginTests=unittest.TestLoader().loadTestsFromTestCase(LoginTests)
+dashboardTests=unittest.TestLoader().loadTestsFromTestCase(DashboardTests)
 
 #driver.quit()
+#smoke_test=unittest.TestSuite([loginTests,dashboardTests])
+smoke_test=unittest.TestSuite([loginTests])
 
+unittest.TextTestRunner(verbosity=2).run(smoke_test)
 
-if __name__=='__main__':
-    unittest.main(verbosity=2)
+# if __name__=='__main__':
+#     unittest.main(verbosity=2)
 
