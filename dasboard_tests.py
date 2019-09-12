@@ -34,36 +34,39 @@ class  DashboardTests(unittest.TestCase):
         # navigate to the application page
        self.driver.get(self.admintool_url)
 
-    def test_correct_login_admin(self):
+    def test_correct_serial_number(self):
         ## get username field textbox
-        self.username_field = self.driver.find_element_by_id("input-username")
-        self.username_field.clear()
-        ## enter username to field
-        self.admin_user = config_parser.get('username_passwords', 'general_user_admin')
-        self.username_field.send_keys(self.admin_user)
+        self.serial_number=self.driver.find_element_by_id("serial_number")
+        Device_SN=self.serial_number.get_attribute('')
+        # self.username_field = self.driver.find_element_by_id("input-username")
+        # self.username_field.clear()
+        # ## enter username to field
+        # self.admin_user = config_parser.get('username_passwords', 'general_user_admin')
+        # self.username_field.send_keys(self.admin_user)
+        #
+        # ## enter password  text field
+        # self.password_field = self.driver.find_element_by_id("input-password")
+        # self.password_field.clear()
+        #
+        # ## enter password to field
+        # self.password_admin_user = config_parser.get('username_passwords', 'general_password_admin')
+        # self.password_field.send_keys(self.password_admin_user)
+        # ### Pres on 'Log in' ###
+        # self.log_in_btn = self.driver.find_element_by_xpath("//*[contains(text(),'Log In')]")
+        # self.log_in_btn.submit()
+        # self.dashboard_url = self.admintool_url + "/#/pages/dashboard"
+        # try:
+        #     myElem = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'ng-star-inserted')))
+        #     #print "Get to Dashboard"
+        #     user = "rammshtein"
+        #     try:
+        #         self.assertTrue(user in self.driver.page_source)
+        #         #print "syccessfully log-in as rammshtein"
+        #     except AssertionError:
+        #         print "not log-in as rammshtein"
+        # except TimeoutException:
+        #     print "Loading took too much time!"
 
-        ## enter password  text field
-        self.password_field = self.driver.find_element_by_id("input-password")
-        self.password_field.clear()
-
-        ## enter password to field
-        self.password_admin_user = config_parser.get('username_passwords', 'general_password_admin')
-        self.password_field.send_keys(self.password_admin_user)
-        ### Pres on 'Log in' ###
-        self.log_in_btn = self.driver.find_element_by_xpath("//*[contains(text(),'Log In')]")
-        self.log_in_btn.submit()
-        self.dashboard_url = self.admintool_url + "/#/pages/dashboard"
-        try:
-            myElem = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'ng-star-inserted')))
-            #print "Get to Dashboard"
-            user = "rammshtein"
-            try:
-                self.assertTrue(user in self.driver.page_source)
-                #print "syccessfully log-in as rammshtein"
-            except AssertionError:
-                print "not log-in as rammshtein"
-        except TimeoutException:
-            print "Loading took too much time!"
 
 
 
