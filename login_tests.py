@@ -64,7 +64,6 @@ class  LoginTests(unittest.TestCase):
         except TimeoutException:
             self.fail("Loading took too much time!")
 
-
     def test_correct_login_user(self):
         #open new tab
         self.driver.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't')
@@ -139,19 +138,20 @@ class  LoginTests(unittest.TestCase):
         self.driver.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't')
         self.driver.get(self.admintool_url)
         ## get username field textbox
+        time.sleep(3)
         self.username_field = self.driver.find_element_by_id("username-input")
         self.username_field.clear()
         ## enter username to field
         self.user = config_parser.get('username_passwords', 'fake_user')
-        self.username_field.send_keys(self.user)
-
+        #self.username_field.send_keys(self.user)
+        self.username_field.send_keys("test")
         ## enter password  text field
         self.password_field = self.driver.find_element_by_id("password-input")
         self.password_field.clear()
-
         ## enter password to field
-        self.password_user = config_parser.get('username_passwords', 'general_password')
+        self.password_user = config_parser.get('username_passwords', 'fake_password')
         self.password_field.send_keys(self.password_user)
+        #time.sleep(10)
         ### Pres on 'Log in' ###
         self.log_in_btn = self.driver.find_element_by_xpath("//*[contains(text(),'Log In')]")
         self.log_in_btn.submit()
@@ -169,14 +169,14 @@ class  LoginTests(unittest.TestCase):
              self.fail("Get an alert message too much time!")
     def test_logout(self):
         ## get username field textbox
-        self.username_field = self.driver.find_element_by_id("input-username")
+        self.username_field = self.driver.find_element_by_id("username-input")
         self.username_field.clear()
         ## enter username to field
         self.admin_user = config_parser.get('username_passwords', 'general_user_admin')
         self.username_field.send_keys(self.admin_user)
 
         ## enter password  text field
-        self.password_field = self.driver.find_element_by_id("input-password")
+        self.password_field = self.driver.find_element_by_id("password-input")
         self.password_field.clear()
 
         ## enter password to field
@@ -207,7 +207,7 @@ class  LoginTests(unittest.TestCase):
             self.fail("Didn't found Log out button")
         logout_btn.click()
         try:
-            myElem = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'input-username')))
+            myElem = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'username-input')))
         except NoSuchElementException:
             self.fail("Didn't return to Login page")
     @classmethod
