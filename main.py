@@ -32,8 +32,9 @@ loginTests=unittest.TestLoader().loadTestsFromTestCase(LoginTests)
 dashboardTests=unittest.TestLoader().loadTestsFromTestCase(DashboardTests)
 
 #driver.quit()
-smoke_test=unittest.TestSuite([loginTests,dashboardTests])
+#smoke_test=unittest.TestSuite([loginTests,dashboardTests])
 #smoke_test=unittest.TestSuite([loginTests])
+smoke_test=unittest.TestSuite([dashboardTests])
 
 
 # configure HTMLTestRUNNER options for HTML report
