@@ -259,6 +259,33 @@ class  LoginTests(unittest.TestCase):
             self.fail("Error message for username not appeared")
             logging.error("Error message for username not appeared, test is FAIL")
 
+    def test_too_short_password(self):
+        logging.info('Start test of appearence message that password is too short...')
+        ## Fill some password ( na matter what it is )
+        self.username_field = self.driver.find_element_by_id("username-input")
+        self.username_field.clear()
+        self.admin_user = config_parser.get('username_passwords', 'general_user_admin')
+        self.username_field.send_keys(self.admin_user)
+        # Fill only one character on password
+        self.password_field = self.driver.find_element_by_id("password-input")
+        self.password_field.clear()
+        ## enter password one character only
+        self.password_field.send_keys('A')
+        ## focus back on username field
+        self.username_field.send_keys(Keys.NULL)
+        try:
+            myElem = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'error-message')))
+            logging.info(myElem.text)
+            try:
+                self.assertEqual(myElem.text, "Password should contains from 4 to 50 characters")
+                logging.info("The alert of too short/long password appear, test is PASS")
+            except AssertionError:
+                self.fail("The message of too short/long password not recognized")
+                logging.error("The message of too short/long password is not appear test is FAIL")
+        except NoSuchElementException:
+            self.fail("Error message of too short/long password not appeared")
+            logging.error("Error message of too short/long password not appeared, test is FAIL")
+
     @classmethod
     def tearDown(self):
         logging.info("###############################")
