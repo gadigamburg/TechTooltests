@@ -4,7 +4,6 @@ from ConfigParser import SafeConfigParser
 import unittest
 import time
 import logging
-
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
@@ -12,8 +11,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
+
 ## Imort Remote connection (SSH) modules
 from SSHConnection import ConnectionToDUT
+
 
 ###  Global content for all project ######
 #path of Chromedriver
@@ -25,7 +26,7 @@ config_parser.read('config.properties')
 device_ip=config_parser.get('unit_parameters','ip')
 
 ### Config logging  ####
-logging.basicConfig(level=logging.INFO, filename='TestAdminTool.log', filemode='w' ,format='%(asctime)s %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, filename='TestAdminTool.log', filemode='a' ,format='%(asctime)s %(levelname)s - %(message)s')
 
 ###########################################
 
@@ -78,22 +79,20 @@ class  DashboardTests(unittest.TestCase):
                 logging.info('check if log-in as rammshtein')
                 time.sleep(2)
                 #print "syccessfully log-in as rammshtein"
-            except AssertionError:
-                print "not log-in as rammshtein"
-        except TimeoutException:
-            print "Loading took too much time!"
+#            except AssertionError:
+            except Exception as e:
+                logging.error("The log-in as rammshtein is ---  FAIL ")
+                logging.error(e)
+                raise e
+        except Exception as e:
+            logging.error("Loading took too much time ---  FAIL ")
+            logging.error(e)
+            raise e
+
         self.general_sn = self.driver.find_element_by_xpath("//div[@class='title' and text()='Serial Number']")
         self.sn=self.general_sn.find_element_by_xpath("//div[@class='status']").text
         logging.info("The Serial number that AdminTool found is : {s}".format(s=self.sn))
-
-        # out, err, sh, client = ConnectionToDUT.RunRemoteCommands('ls')
-        # logging.info(out)
-        # time.sleep(10)
-        # ConnectionToDUT.CloseSSHConnection(sh, client)
-
-
-        #self.real_serial_number= config_parser.get('unit_parameters', 'serial_number')
-        self.real_serial_number=out.strip() + out2.strip() + '1'
+        self.real_serial_number=out.strip() + out2.strip()
         logging.info("The real Serial number on device is : {s}".format(s=self.real_serial_number))
         try:
             self.assertEqual(self.sn,self.real_serial_number)
