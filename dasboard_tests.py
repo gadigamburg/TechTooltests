@@ -268,15 +268,40 @@ class  DashboardTests(unittest.TestCase):
             raise e
     def test_K_DateTime(self):
         T = ConnectionToDUT()
-        comm="'%d/%m/%Y %H:%M'"
+        #"'%d/%m/%Y %H:%M'"
         out, err, sh, client = T.RunRemoteCommands("date +'%d/%m/%Y %H:%M'")
         T.CloseSSHConnection(sh, client)
         logging.info('start check device time on adminTool at UTC format')
         self.datetime = self.driver.find_element_by_xpath("//span[@class='font-weight-bolder ml-1 ng-star-inserted']")
-        logging.info(self.datetime.text)
-        curr_sys_datetime=out+" UTC"
-        logging.info(curr_sys_datetime)
-        logging.info("#############")
+        logging.info("The date time value that AdminTool show is : {s}".format(s=self.datetime.text))
+        curr_sys_datetime=out.rstrip()+" UTC"
+        logging.info("The value of date time we get from system is : {s}".format(s=curr_sys_datetime))
+        try:
+           self.assertEqual(self.datetime.text, curr_sys_datetime)
+           logging.info("The value of AdminTool is equal to system date time value")
+        except AssertionError as e:
+            logging.error("The date time value that AdminTool show is not equal to real system clock !")
+            logging.error(e)
+            raise e
+
+    def test_L_ShowDeviceType(self):
+        T = ConnectionToDUT()
+        # "'%d/%m/%Y %H:%M'"
+        out, err, sh, client = T.RunRemoteCommands("date +'%d/%m/%Y %H:%M'")
+        T.CloseSSHConnection(sh, client)
+        logging.info('start check device time on adminTool at UTC format')
+        self.datetime = self.driver.find_element_by_xpath("//span[@class='font-weight-bolder ml-1 ng-star-inserted']")
+        logging.info("The date time value that AdminTool show is : {s}".format(s=self.datetime.text))
+        curr_sys_datetime = out.rstrip() + " UTC"
+        logging.info("The value of date time we get from system is : {s}".format(s=curr_sys_datetime))
+        try:
+            self.assertEqual(self.datetime.text, curr_sys_datetime)
+            logging.info("The value of AdminTool is equal to system date time value")
+        except AssertionError as e:
+            logging.error("The date time value that AdminTool show is not equal to real system clock !")
+            logging.error(e)
+            raise e
+
     @classmethod
 #    def tearDown(self):
     def tearDownClass(self):
