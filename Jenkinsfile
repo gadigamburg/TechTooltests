@@ -13,25 +13,11 @@ pipeline {
                                 string(defaultValue: '34.220.17.148',
                                        description: 'ip address',
                                        name: 'IP')])
-                dir('Release'){
-                deleteDir()
-                checkout([$class: 'GitSCM', branches: [[name: '*/Dev']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b6218c54-9fe9-4052-8da9-58322b94e248', url: 'https://github.com/gadigamburg/Release.git']]])
-                }
-                dir('development'){
-                deleteDir()
-                checkout([$class: 'GitSCM', branches: [[name: '*/Dev']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b6218c54-9fe9-4052-8da9-58322b94e248', url: 'https://github.com/gadigamburg/CI-CD-Project.git']]])
-                sh "git fetch --all"
-                CurrentVersion = sh script: "git branch -r | cut -d'/' -f2 | grep -v -e master -e HEAD -e Dev | sort -r | head -1 ", returnStdout: true
-                CurrentVersion = CurrentVersion.trim()
-                int a = sh script : "echo $CurrentVersion | cut -c1", returnStdout: true
-                int b = sh script : "echo \"$CurrentVersion\" | cut -c3", returnStdout: true
-                int c = sh script : "echo \"$CurrentVersion\" | cut -c5", returnStdout: true
-                commitIDshort = sh script:"git rev-parse HEAD | cut -c1-10", returnStdout: true
-                commitIDshort = commitIDshort.trim()
-                nextVersion = "${a}.${b}.${c+1}"
-                BuildVersion = "${CurrentVersion}_${commitIDshort}"
-                echo("BuildVersion Is: ${BuildVersion}")
-                }
+                    dir('TechToolTest'){
+                        deleteDir()
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Patch-1']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b6218c54-9fe9-4052-8da9-58322b94e248', url: 'https://github.com/gadigamburg/TechTooltests.git']]])
+                        sh "git fetch --all"
+                    }
                 }
             }
         }
